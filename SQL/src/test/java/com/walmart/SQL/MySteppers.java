@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 
@@ -51,7 +52,8 @@ public class MySteppers extends SpringIntegrationTest {
         HttpEntity<String> entity = new HttpEntity<String>(jsonBody,headers);
 
         restTemplate = new RestTemplate();
-        latestResponse = restTemplate.postForEntity("localhost:8080/students",entity,String.class);
+        ResponseEntity<String> postForEntity = restTemplate.postForEntity("http://localhost:8000/students",entity,String.class);
+        latestResponse = new ResponseResults(postForEntity);
     }
 
     @Then("^the client receives status code ok$")

@@ -17,7 +17,7 @@ import java.util.Map;
 @SpringBootTest(classes = SqlApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ContextConfiguration
 public class SpringIntegrationTest {
-    static ResponseEntity<String> latestResponse = null;
+    static ResponseResults latestResponse = null;
 
     @Autowired
     protected RestTemplate restTemplate;
@@ -29,11 +29,11 @@ public class SpringIntegrationTest {
         final ResponseResultErrorHandler errorHandler = new ResponseResultErrorHandler();
 
         restTemplate.setErrorHandler(errorHandler);
-        latestResponse = (ResponseEntity<String>) restTemplate.execute(url, HttpMethod.GET, requestCallback, response -> {
+        latestResponse = restTemplate.execute(url, HttpMethod.GET, requestCallback, response -> {
             if (errorHandler.hadError) {
                 return (errorHandler.getResults());
             } else {
-                return ("200");
+                return (new ResponseResults(response));
             }
         });
     }
